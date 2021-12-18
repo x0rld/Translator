@@ -1,0 +1,76 @@
+﻿using System;
+using System.Web;
+using System.Net.Http;
+using Newtonsoft.Json.Linq;
+
+namespace CliTranslator
+{
+    // ReSharper disable once ClassNeverInstantiated.Global
+    // ReSharper disable once ArrangeTypeModifiers
+    class Program
+    {
+        private string _text;
+        private string _targetLang;
+        private string _apiToken;
+
+        public static void Main()
+        {
+            var program = new Program
+            {
+                _apiToken = Config.DeeplApi
+            };
+            program.AskToUser();
+            program.Request();
+        }
+
+        private static void DisplayTranslate(HttpResponseMessage responseMessage)
+        {
+            var responseContent = responseMessage.Content;
+            var responseString = responseContent.ReadAsStringAsync().Result;
+            var json = JObject.Parse(responseString);
+            var translated = json!["translations"]![0]!["text"];
+            var assumeLanguage = json["translations"][0]["detected_source_language"];
+            Console.WriteLine($"le texte traduit est: {translated}");
+            Console.WriteLine($"La langue reconnue est {assumeLanguage}");
+        }
+
+        private void AskToUser()
+        {
+            do
+            {
+                Console.WriteLine("veuillez saisir le texte à traduire");
+                _text = Console.ReadLine();
+                if (_text == null)
+                {
+                    Console.WriteLine(" Error cannot read line");
+                    Environment.Exit(2);
+                }
+            } while (_text.Trim() == string.Empty);
+
+            Console.WriteLine("veuillez saisir la langue de traduction");
+            _targetLang = Console.ReadLine();
+            if (_targetLang == null)
+            {
+                Console.WriteLine(" Error cannot read line");
+                Environment.Exit(2);
+            }
+            _text = HttpUtility.UrlEncode(_text);
+        }
+        private void Request()
+        {
+            var client = new HttpClient();
+            var response = client.GetAsync(
+                $"https://api-free.deepl.com/v2/translate?auth_key={_apiToken}" +
+                $"&text={_text}&target_lang={_targetLang}").Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                DisplayTranslate(response);
+            }
+            else
+            {
+                Console.WriteLine(response.StatusCode);
+            }
+        }
+    }
+}
