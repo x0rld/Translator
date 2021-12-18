@@ -1,0 +1,65 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:GUITranslator"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:styles="clr-namespace:Material.Styles;assembly=Material.Styles"
+        mc:Ignorable="d" 
+        SizeToContent="WidthAndHeight"
+        x:Class="GUITranslator.MainWindow"
+        Icon="/Assets/deepl_logo.ico"
+        Title="GUITranslator">
+
+    <StackPanel>
+        <styles:Card MaxWidth="350" HorizontalAlignment="Stretch" Width="210">
+            <TextBlock Classes="Headline6" Text="Deepl With Avalonia!"/>
+        </styles:Card>
+        <styles:MaterialUnderline></styles:MaterialUnderline>
+        <styles:Card MaxHeight="300" Width="300" Margin="10" HorizontalAlignment="Left">
+        <ScrollViewer>
+            <TextBox  x:Name="InputBox" 
+                      Watermark="Write the sentence to translate" 
+                      AcceptsReturn="True" TextWrapping="Wrap" ></TextBox>
+        </ScrollViewer>
+        </styles:Card>
+        <styles:Card Width="300"  Margin="10" HorizontalAlignment="Left">
+            <ComboBox SelectionChanged="TargetLang_OnSelectionChanged"  SelectedIndex="9">
+                <ComboBoxItem Tag="BG"> Bulgarian</ComboBoxItem>
+                <ComboBoxItem Tag="CS"> Czech</ComboBoxItem>
+                <ComboBoxItem Tag="DA"> Danish</ComboBoxItem>
+                <ComboBoxItem Tag="DE"> German</ComboBoxItem>
+                <ComboBoxItem Tag="EL"> Greek</ComboBoxItem>
+                <ComboBoxItem Tag="EN"> English</ComboBoxItem>
+                <ComboBoxItem Tag="ES"> Spanish</ComboBoxItem>
+                <ComboBoxItem Tag="ET"> Estonian</ComboBoxItem>
+                <ComboBoxItem Tag="FI"> Finnish</ComboBoxItem>
+                <ComboBoxItem Tag="FR"> French</ComboBoxItem>
+                <ComboBoxItem Tag="HU"> Hungarian</ComboBoxItem>
+                <ComboBoxItem Tag="IT"> Italian</ComboBoxItem>
+                <ComboBoxItem Tag="JA"> Japanese</ComboBoxItem>
+                <ComboBoxItem Tag="LT"> Lithuanian</ComboBoxItem>
+                <ComboBoxItem Tag="LV"> Latvian</ComboBoxItem>
+                <ComboBoxItem Tag="NL"> Dutch</ComboBoxItem>
+                <ComboBoxItem Tag="PL"> Polish</ComboBoxItem>
+                <ComboBoxItem Tag="PT"> Portuguese</ComboBoxItem>
+                <ComboBoxItem Tag="RO"> Romanian</ComboBoxItem>
+                <ComboBoxItem Tag="RU"> Russian</ComboBoxItem>
+                <ComboBoxItem Tag="SK"> Slovak</ComboBoxItem>
+                <ComboBoxItem Tag="SL"> Slovenian</ComboBoxItem>
+                <ComboBoxItem Tag="SV"> Swedish</ComboBoxItem>
+                <ComboBoxItem Tag="ZH"> Chinese</ComboBoxItem>
+            </ComboBox>
+        </styles:Card>
+        <Button Margin="16" Click="OnTranslateClick" HorizontalAlignment="Left" >Translate</Button>
+        
+        <styles:Card Width="200"  Margin="10" HorizontalAlignment="Left">
+            <TextBlock x:Name="LangBlock">Lang: </TextBlock>
+        </styles:Card>
+        <styles:Card  MaxHeight="300"  Width="300" Margin="10" HorizontalAlignment="Left">
+            <ScrollViewer>
+            <TextBlock x:Name="ResponseBlock" 
+                       TextWrapping="Wrap">Translated text</TextBlock>
+            </ScrollViewer>
+        </styles:Card>
+    </StackPanel>
+</Window>
