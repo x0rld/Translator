@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Web;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
 namespace CliTranslator
@@ -12,15 +14,16 @@ namespace CliTranslator
         private string _text;
         private string _targetLang;
         private string _apiToken;
-
-        public static void Main()
+        private readonly HttpClient _client = new HttpClient();
+        
+        public static async Task Main()
         {
             var program = new Program
             {
                 _apiToken = Config.DeeplApi
             };
             program.AskToUser();
-            program.Request();
+            await program.Request();
         }
 
         private static void DisplayTranslate(HttpResponseMessage responseMessage)
@@ -56,20 +59,20 @@ namespace CliTranslator
             }
             _text = HttpUtility.UrlEncode(_text);
         }
-        private void Request()
+        private async Task Request()
         {
-            var client = new HttpClient();
-            var response = client.GetAsync(
+            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var response = _client.GetAsync(
                 $"https://api-free.deepl.com/v2/translate?auth_key={_apiToken}" +
-                $"&text={_text}&target_lang={_targetLang}").Result;
-
-            if (response.IsSuccessStatusCode)
+                $"&text={_text}&target_lang={_targetLang}");
+            var message = await response;
+            if (message.IsSuccessStatusCode)
             {
-                DisplayTranslate(response);
+                DisplayTranslate(message);
             }
             else
             {
-                Console.WriteLine(response.StatusCode);
+                Console.WriteLine(message.StatusCode);
             }
         }
     }
