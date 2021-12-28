@@ -4,12 +4,13 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace CliTranslator
 {
     // ReSharper disable once ClassNeverInstantiated.Global
     // ReSharper disable once ArrangeTypeModifiers
-    class Program
+    class Cli
     {
         private string _text;
         private string _targetLang;
@@ -18,10 +19,16 @@ namespace CliTranslator
         
         public static async Task Main()
         {
-            var program = new Program
+            var config = new ConfigurationBuilder().AddUserSecrets<Cli>()
+                .AddJsonFile("appsettings.json").Build();
+            var program = new Cli
             {
-                _apiToken = Config.DeeplApi
+                _apiToken = config["ApiKey"]
             };
+            if (program._apiToken == null)
+            {
+                Environment.Exit(1);
+            }
             program.AskToUser();
             await program.Request();
         }
