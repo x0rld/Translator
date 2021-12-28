@@ -3,6 +3,7 @@
   <component name="AvaloniaProject">
     <option name="projectPerEditor">
       <map>
+        <entry key="GUITranslator/App.axaml" value="GUITranslator/GUITranslator.csproj" />
         <entry key="GUITranslator/MainWindow.axaml" value="GUITranslator/GUITranslator.csproj" />
       </map>
     </option>

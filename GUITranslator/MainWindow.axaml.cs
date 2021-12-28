@@ -1,8 +1,10 @@
+using System;
 using System.Net.Http;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 
 namespace GUITranslator
@@ -11,7 +13,15 @@ namespace GUITranslator
     {
         public MainWindow()
         {
-            ApiToken = Config.DeeplApi;
+            
+            
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json").Build();
+            ApiToken = config["ApiKey"];
+            if (ApiToken == null)
+            {
+                Environment.Exit(1);
+            }
             InitializeComponent();
 #if DEBUG
             this.AttachDevTools();
