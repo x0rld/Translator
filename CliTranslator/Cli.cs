@@ -2,6 +2,7 @@
 using System.Web;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Microsoft.Extensions.Configuration;
@@ -36,7 +37,7 @@ namespace CliTranslator
         {
             var responseContent = responseMessage.Content;
             var responseString = responseContent.ReadAsStringAsync().Result;
-            var json = JObject.Parse(responseString);
+            var json = JsonNode.Parse(responseString);
             var translated = json!["translations"]![0]!["text"];
             var assumeLanguage = json["translations"][0]["detected_source_language"];
             Console.WriteLine($"le texte traduit est: {translated}");
