@@ -53,8 +53,7 @@ namespace CliTranslator
                 if (_text == null)
                 {
                     Console.WriteLine(" Error cannot read line");
-                    Environment.Exit(2);
-                }
+                    throw new ApplicationException("stdin closed"); }
             } while (_text.Trim() == string.Empty);
 
             Console.WriteLine("veuillez saisir la langue de traduction");
@@ -62,7 +61,7 @@ namespace CliTranslator
             if (_targetLang == null)
             {
                 Console.WriteLine(" Error cannot read line");
-                Environment.Exit(2);
+                throw new ApplicationException("stdin closed"); 
             }
             _text = HttpUtility.UrlEncode(_text);
         }
