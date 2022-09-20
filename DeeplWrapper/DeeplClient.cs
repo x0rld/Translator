@@ -9,7 +9,7 @@ public class DeeplClient
     private static readonly HttpClient Client = new HttpClient();
     public DeeplClient(string apikey)
     {
-        _apikey = apikey;
+        _apikey = apikey ?? throw new ArgumentException("api key invalid",apikey);
         Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
     }
 
