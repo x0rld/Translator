@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUITranslator", "GUITransla
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliTranslator", "CliTranslator\CliTranslator.csproj", "{3AB9B9E5-C958-490A-AA10-A2AF81894FDC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeeplWrapper", "DeeplWrapper\DeeplWrapper.csproj", "{472DA5A2-3E47-4EB0-9BC8-0396213FDF67}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{3AB9B9E5-C958-490A-AA10-A2AF81894FDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3AB9B9E5-C958-490A-AA10-A2AF81894FDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3AB9B9E5-C958-490A-AA10-A2AF81894FDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{472DA5A2-3E47-4EB0-9BC8-0396213FDF67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{472DA5A2-3E47-4EB0-9BC8-0396213FDF67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{472DA5A2-3E47-4EB0-9BC8-0396213FDF67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{472DA5A2-3E47-4EB0-9BC8-0396213FDF67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
