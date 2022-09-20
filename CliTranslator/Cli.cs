@@ -4,13 +4,10 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using Microsoft.Extensions.Configuration;
 
 namespace CliTranslator
 {
-    // ReSharper disable once ClassNeverInstantiated.Global
-    // ReSharper disable once ArrangeTypeModifiers
     class Cli
     {
         private string _text;
