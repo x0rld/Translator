@@ -11,16 +11,16 @@ namespace GUITranslator
 {
     public class MainWindow : Window
     {
+        private  string? ApiToken { get;}
+        private string? SelectedLang { get; set; }
         public MainWindow()
         {
-            
-            
             var config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json").Build();
+                .AddUserSecrets<MainWindow>().Build();
             ApiToken = config["ApiKey"];
             if (ApiToken == null)
             {
-                Environment.Exit(1);
+                throw new ApplicationException("no api key");
             }
             InitializeComponent();
 #if DEBUG
@@ -83,8 +83,6 @@ namespace GUITranslator
             langBlock.Text = "Lang: " + assumeLanguage;
         }
 
-        private  string? ApiToken { get;}
-        private string? SelectedLang { get; set; }
 
         private void TargetLang_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
         {

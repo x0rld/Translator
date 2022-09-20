@@ -19,15 +19,14 @@ namespace CliTranslator
         
         public static async Task Main()
         {
-            var config = new ConfigurationBuilder().AddUserSecrets<Cli>()
-                .AddJsonFile("appsettings.json").Build();
+            var config = new ConfigurationBuilder().AddUserSecrets<Cli>().Build();
             var program = new Cli
             {
                 _apiToken = config["ApiKey"]
             };
             if (program._apiToken == null)
             {
-                Environment.Exit(1);
+                throw new ApplicationException("no api key");
             }
             program.AskToUser();
             await program.Request();
