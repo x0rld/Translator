@@ -1,9 +1,11 @@
 using System;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Material.Styles;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 
@@ -36,46 +38,72 @@ namespace GUITranslator
         }
     
 
-        private void OnTranslateClick(object? sender, RoutedEventArgs routedEventArgs)
+        private async void OnTranslateClick(object? sender, RoutedEventArgs routedEventArgs)
         {
-            NameScope thisWindowNameScope = (NameScope)this.FindNameScope();
-            var inputBox = (TextBox)thisWindowNameScope.Find("InputBox");
-            switch (Request(inputBox))
-             {
-                 case 1:
-                     
-                     break;
-                 case 2:
-                     System.Environment.Exit(2);
-                     break;
-             }
-             
-
-        }
-        private int Request(TextBox text)
-        {
-            if (text.Text == null || SelectedLang == null )
+            void DisplayError(NameScope nameScope, ArgumentException e, TextBox textBox, object card)
             {
-                return 1;
+                if (nameScope.Find("ErrorInput") is TextBlock errorBlock)
+                {
+                    errorBlock.Text = e.Message;
+                    textBox.Text = string.Empty;
+                }
+
+                if (card is Card c)
+                {
+                    c.IsVisible = true;
+                }
+            }
+
+            var thisWindowNameScope = (NameScope)this.FindNameScope();
+            var errorInputCard = thisWindowNameScope.Find("ErrorInputCard");
+            if (errorInputCard is Card card )
+            {
+                card.IsVisible = false;    
+            }
+            var inputBox = (TextBox)thisWindowNameScope.Find("InputBox");
+            try
+            {
+                await Request(inputBox);
+            }
+            catch (ArgumentException e)
+            {
+                DisplayError(thisWindowNameScope, e, inputBox, errorInputCard);
+            }
+            catch (Exception e)
+            {
+                if (thisWindowNameScope.Find("ErrorInput") is TextBlock errorBlock)
+                {
+                    errorBlock.Text = e.Message;
+                }
+                
+                if (errorInputCard is Card c)
+                {
+                    c.IsVisible = true;
+                }
+            }
+        }
+        private async Task Request(TextBox text)
+        {
+            if (string.IsNullOrWhiteSpace(text.Text) || SelectedLang == null )
+            {
+                throw new ArgumentException("text is empty or whitespace");
             }
             var client = new HttpClient();
-            var response = client.GetAsync(
+            var response = await client.GetAsync(
                 $"https://api-free.deepl.com/v2/translate?auth_key={ApiToken}" +
-                $"&text={text.Text}&target_lang={SelectedLang}").Result;
+                $"&text={text.Text}&target_lang={SelectedLang}");
 
-            if (!response.IsSuccessStatusCode) return 2;
-            DisplayTranslate(response);
-            return 0;
-
+            if (!response.IsSuccessStatusCode) throw new Exception("error with api");
+            await DisplayTranslate(response);
         }
 
-        private void DisplayTranslate(HttpResponseMessage response)
+        private async Task DisplayTranslate(HttpResponseMessage response)
         {
-            NameScope thisWindowNameScope = (NameScope)this.FindNameScope();
+            var thisWindowNameScope = (NameScope)this.FindNameScope();
             var responseBlock = (TextBlock)thisWindowNameScope.Find("ResponseBlock");
             var langBlock = (TextBlock)thisWindowNameScope.Find("LangBlock");
 
-            var responseString = response.Content.ReadAsStringAsync().Result;
+            var responseString = await response.Content.ReadAsStringAsync();
             var json = JObject.Parse(responseString); 
             var translated =json["translations"]![0]!["text"];
             var assumeLanguage = json["translations"]![0]!["detected_source_language"];

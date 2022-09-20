@@ -50,6 +50,10 @@
                 <ComboBoxItem Tag="ZH"> Chinese</ComboBoxItem>
             </ComboBox>
         </styles:Card>
+        <styles:Card Width="200" x:Name="ErrorInputCard" Margin="10" HorizontalAlignment="Left" IsVisible="False">
+            <TextBlock x:Name="ErrorInput" Foreground="#FF0000"></TextBlock>
+        </styles:Card>
+        
         <Button Margin="16" Click="OnTranslateClick" HorizontalAlignment="Left" >Translate</Button>
         
         <styles:Card Width="200"  Margin="10" HorizontalAlignment="Left">
