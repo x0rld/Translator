@@ -14,9 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="appsettings.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
+      <ProjectReference Include="..\DeeplWrapper\DeeplWrapper.csproj" />
     </ItemGroup>
 
 </Project>

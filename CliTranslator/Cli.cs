@@ -1,81 +1,64 @@
 ﻿using System;
+using System.Linq;
 using System.Web;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text.Json.Nodes;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
+using DeeplWrapper;
 using Microsoft.Extensions.Configuration;
 
 namespace CliTranslator
 {
-    class Cli
+    internal class Cli
     {
-        private string _text;
-        private string _targetLang;
-        private string _apiToken;
-        private readonly HttpClient _client = new HttpClient();
-        
-        public static async Task Main()
+        private readonly DeeplClient Deepl;
+
+        private Cli(string apikey)
         {
-            var config = new ConfigurationBuilder().AddUserSecrets<Cli>().Build();
-            var program = new Cli
-            {
-                _apiToken = config["ApiKey"]
-            };
-            if (program._apiToken == null)
-            {
-                throw new ApplicationException("no api key");
-            }
-            program.AskToUser();
-            await program.Request();
+            Deepl = new DeeplClient(apikey);
         }
 
-        private static async Task DisplayTranslate(HttpResponseMessage responseMessage)
+        public static void Main()
         {
-            var responseString = await responseMessage.Content.ReadAsStringAsync();
-            var json = JsonNode.Parse(responseString);
-            var translated = json!["translations"]![0]!["text"];
-            var assumeLanguage = json["translations"][0]["detected_source_language"];
+            var config = new ConfigurationBuilder().AddUserSecrets<Cli>().Build();
+            var program = new Cli(config["ApiKey"]);
+            program.AskToUser();
+        }
+
+        private static void DisplayTranslate(Translation datas)
+        {
+            var (assumeLanguage, translated) = datas;
             Console.WriteLine($"le texte traduit est: {translated}");
             Console.WriteLine($"La langue reconnue est {assumeLanguage}");
         }
 
         private void AskToUser()
         {
+            string text;
             do
             {
                 Console.WriteLine("veuillez saisir le texte à traduire");
-                _text = Console.ReadLine();
-                if (_text == null)
-                {
-                    Console.WriteLine(" Error cannot read line");
-                    throw new ApplicationException("stdin closed"); }
-            } while (_text.Trim() == string.Empty);
+                text = Console.ReadLine();
+                if (text != null) continue;
+                throw new ApplicationException("error reading input");
+            } while (string.IsNullOrWhiteSpace(text));
 
             Console.WriteLine("veuillez saisir la langue de traduction");
-            _targetLang = Console.ReadLine();
-            if (_targetLang == null)
+            var targetLang = Console.ReadLine();
+            if (targetLang == null)
             {
                 Console.WriteLine(" Error cannot read line");
                 throw new ApplicationException("stdin closed"); 
             }
-            _text = HttpUtility.UrlEncode(_text);
+            text = HttpUtility.UrlEncode(text);
+            Request(text,targetLang);
+
         }
-        private async Task Request()
+        private async void Request(string text, string targetLang)
         {
-            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var response = _client.GetAsync(
-                $"https://api-free.deepl.com/v2/translate?auth_key={_apiToken}" +
-                $"&text={_text}&target_lang={_targetLang}");
-            var message = await response;
-            if (message.IsSuccessStatusCode)
-            {
-               await DisplayTranslate(message);
-            }
-            else
-            {
-                Console.WriteLine("error");
-            }
+            var response = Deepl.Translate(text,targetLang);
+             DisplayTranslate(await response);
         }
     }
 }
