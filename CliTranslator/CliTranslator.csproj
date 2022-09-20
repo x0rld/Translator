@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>CliTranslator</RootNamespace>
       <UserSecretsId>2c7c7ec0-2677-4794-bb75-4b4c09241082</UserSecretsId>
   </PropertyGroup>
@@ -11,13 +11,5 @@
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.0" />
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     </ItemGroup>
-
-    <ItemGroup>
-        <None Update="appsettings.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
-
 </Project>
