@@ -30,10 +30,9 @@ namespace CliTranslator
             await program.Request();
         }
 
-        private static void DisplayTranslate(HttpResponseMessage responseMessage)
+        private static async Task DisplayTranslate(HttpResponseMessage responseMessage)
         {
-            var responseContent = responseMessage.Content;
-            var responseString = responseContent.ReadAsStringAsync().Result;
+            var responseString = await responseMessage.Content.ReadAsStringAsync();
             var json = JsonNode.Parse(responseString);
             var translated = json!["translations"]![0]!["text"];
             var assumeLanguage = json["translations"][0]["detected_source_language"];
@@ -71,11 +70,11 @@ namespace CliTranslator
             var message = await response;
             if (message.IsSuccessStatusCode)
             {
-                DisplayTranslate(message);
+               await DisplayTranslate(message);
             }
             else
             {
-                Console.WriteLine(message.StatusCode);
+                Console.WriteLine("error");
             }
         }
     }
