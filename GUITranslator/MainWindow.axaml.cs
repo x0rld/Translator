@@ -60,7 +60,7 @@ namespace GUITranslator
             {
                 card.IsVisible = false;    
             }
-            var inputBox = (TextBox)thisWindowNameScope.Find("InputBox");
+            var inputBox = thisWindowNameScope.Find<TextBox>("InputBox");
             try
             {
                 await Request(inputBox);

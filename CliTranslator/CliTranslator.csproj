@@ -2,19 +2,20 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <RootNamespace>CliTranslator</RootNamespace>
-      <UserSecretsId>2c7c7ec0-2677-4794-bb75-4b4c09241082</UserSecretsId>
-  </PropertyGroup>
+        <UserSecretsId>2c7c7ec0-2677-4794-bb75-4b4c09241082</UserSecretsId>
+        <PublishAot>true</PublishAot>
+    </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DeeplWrapper\DeeplWrapper.csproj" />
+        <ProjectReference Include="..\DeeplWrapper\DeeplWrapper.csproj"/>
     </ItemGroup>
 
 </Project>
