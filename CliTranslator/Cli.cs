@@ -12,28 +12,28 @@ namespace CliTranslator
 {
     internal class Cli
     {
-        private readonly DeeplClient Deepl;
+        private readonly DeeplClient _deepl;
 
         private Cli(string apikey)
         {
-            Deepl = new DeeplClient(apikey);
+            _deepl = new DeeplClient(apikey);
         }
 
-        public static void Main()
+        public static async Task Main()
         {
             var config = new ConfigurationBuilder().AddUserSecrets<Cli>().Build();
-            var program = new Cli(config["ApiKey"]);
-            program.AskToUser();
+            var program = new Cli(config["ApiKey"] ?? Environment.GetEnvironmentVariable("ApiKey"));
+            await program.AskToUser();
         }
 
-        private static void DisplayTranslate(Translation datas)
+        private static void DisplayTranslate(Translation translations)
         {
-            var (assumeLanguage, translated) = datas;
-            Console.WriteLine($"le texte traduit est: {translated}");
+            var (assumeLanguage, translatedSentence) = translations;
+            Console.WriteLine($"le texte traduit est: {translatedSentence}");
             Console.WriteLine($"La langue reconnue est {assumeLanguage}");
         }
 
-        private void AskToUser()
+        private async Task AskToUser()
         {
             string text;
             do
@@ -52,13 +52,13 @@ namespace CliTranslator
                 throw new ApplicationException("stdin closed"); 
             }
             text = HttpUtility.UrlEncode(text);
-            Request(text,targetLang);
+            await Request(text,targetLang);
 
         }
-        private async void Request(string text, string targetLang)
+        private async Task Request(string text, string targetLang)
         {
-            var response = Deepl.Translate(text,targetLang);
-             DisplayTranslate(await response);
+            var translations = await _deepl.Translate(text,targetLang);
+             DisplayTranslate(translations);
         }
     }
 }

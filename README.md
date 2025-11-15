@@ -1,4 +1,4 @@
-#Deepl Translator
+# Deepl Translator
 
 This is just a translator using deepl API to do a project in C#
 
