@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="CliTranslator/CliTranslator.csproj" />
+  <Project Path="DeeplWrapper/DeeplWrapper.csproj" />
+  <Project Path="GUITranslator/GUITranslator.csproj" />
+</Solution>
