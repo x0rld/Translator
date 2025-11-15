@@ -4,9 +4,18 @@ using System.Text.Json.Serialization;
 
 namespace DeeplWrapper;
 
-public record Translation(string DetectedSourceLanguage, string TranslatedText);
+public record RootObject(
+    [property: JsonPropertyName("translations")]
+    Translation[] Translations
+);
 
-[JsonSerializable(typeof(Translation))]
+public record Translation(
+    [property: JsonPropertyName("detected_source_language")]
+    string DetectedSourceLanguage, 
+    [property: JsonPropertyName("text")]
+    string Text);
+
+[JsonSerializable(typeof(RootObject))]
 internal partial class SourceGenerationContext : JsonSerializerContext
 {
 }
@@ -32,7 +41,11 @@ public class DeeplClient
             throw new HttpRequestException("error in target language");
         }
 
-        return JsonSerializer.Deserialize<Translation>(await response.Content.ReadAsStreamAsync()) ??
-               throw new InvalidOperationException("invalid json from api");
+       
+        var result = JsonSerializer.Deserialize<RootObject>(
+                         await response.Content.ReadAsStreamAsync(),
+                         SourceGenerationContext.Default.RootObject) ??
+                     throw new InvalidOperationException("invalid json from api");
+        return result.Translations.First();
     }
 }
